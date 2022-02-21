@@ -4,6 +4,9 @@
 #include <fstream>
 #include <filesystem>
 #include <thread>
+#include <vector>
+#include <mutex>
+#include <atomic>
 
 class FileWatcher
 {
@@ -15,8 +18,10 @@ private:
     void UpdateStats();
     void ClearStats();
     void UpdateLineStats(const std::filesystem::directory_entry &dir_entry);
+    void WaitForTasks();
 
+    std::vector<std::thread> threads;
     int numOfFiles = 0;
-    int numOfNonEmptyLines = 0;
-    int numOfEmptyLines = 0;
+    std::atomic<int> numOfNonEmptyLines = 0;
+    std::atomic<int> numOfEmptyLines = 0;
 };

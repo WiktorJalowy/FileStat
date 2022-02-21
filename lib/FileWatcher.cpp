@@ -16,7 +16,16 @@ std::tuple<int, int, int> FileWatcher::GetStats()
 {
     ClearStats();
     UpdateStats();
-    return std::make_tuple(numOfFiles, numOfNonEmptyLines, numOfEmptyLines);
+    WaitForTasks();
+    return std::make_tuple(numOfFiles, numOfNonEmptyLines.load(), numOfEmptyLines.load());
+}
+
+void FileWatcher::WaitForTasks()
+{
+    for (unsigned i = 0; i < threads.size(); i++)
+    {
+        threads[i].join();
+    }
 }
 
 void FileWatcher::ClearStats()
@@ -49,12 +58,12 @@ void FileWatcher::UpdateStats()
         if (dir_entry.is_regular_file())
         {
             numOfFiles++;
-            std::thread threadOne(
-                [&]()
+            threads.push_back(std::thread(
+                [this, dir_entry]()
                 {
                     UpdateLineStats(dir_entry);
-            });
-            threadOne.join();
+                }
+            ));
         }
     }
 }

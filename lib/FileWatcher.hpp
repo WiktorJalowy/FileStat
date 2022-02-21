@@ -5,6 +5,5 @@
 class FileWatcher
 {
 public:
-    FileWatcher(std::string path);
-
+    FileWatcher(const std::string &path);
 };

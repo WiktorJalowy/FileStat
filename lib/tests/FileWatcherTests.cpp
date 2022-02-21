@@ -7,5 +7,6 @@ TEST(FileWatcher, ShouldNotThrowWhenPathExists)
 }
 TEST(FileWatcher, ShouldThrowWhenPathDoesNotExist)
 {
-    ASSERT_THROW(FileWatcher("abc"), std::exception);
+    const std::string nonExistingDummyPath = "asdfsf";
+    ASSERT_THROW(FileWatcher{nonExistingDummyPath}, std::exception);
 }

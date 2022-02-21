@@ -4,7 +4,7 @@
 
 TEST(FileWatcher, ShouldNotThrowWhenPathExists)
 {
-    ASSERT_NO_THROW(FileWatcher(std::filesystem::temp_directory_path().c_str()));
+    ASSERT_NO_THROW(FileWatcher(std::filesystem::temp_directory_path()));
 }
 
 TEST(FileWatcher, ShouldThrowWhenPathDoesNotExist)
@@ -18,7 +18,7 @@ TEST(FileWatcher, ShouldReturnZeroFilesZeroLinesZeroEmptyLinesWhenGivenFolderIsE
     std::filesystem::current_path(std::filesystem::temp_directory_path());
     std::filesystem::create_directory("FileWatcherTestFolder");
 
-    FileWatcher fw(std::filesystem::temp_directory_path().append("FileWatcherTestFolder").c_str());
+    FileWatcher fw(std::filesystem::temp_directory_path().append("FileWatcherTestFolder"));
     EXPECT_EQ(0, std::get<0>(fw.GetStats()));
     EXPECT_EQ(0, std::get<1>(fw.GetStats()));
     EXPECT_EQ(0, std::get<2>(fw.GetStats()));
@@ -27,14 +27,12 @@ TEST(FileWatcher, ShouldReturnZeroFilesZeroLinesZeroEmptyLinesWhenGivenFolderIsE
 
 TEST(FileWatcher, ShouldReturnOneFilesZeroLinesZeroEmptyLines)
 {
-    const std::string dummyFile = "asdfsf";
-
     std::filesystem::current_path(std::filesystem::temp_directory_path());
     std::filesystem::create_directory("FileWatcherTestFolder");
     std::filesystem::current_path(std::filesystem::temp_directory_path().append("FileWatcherTestFolder"));
 
-    std::ofstream(dummyFile.c_str());
-    FileWatcher fw(std::filesystem::current_path().c_str());
+    std::ofstream("asdfsf");
+    FileWatcher fw(std::filesystem::current_path());
     EXPECT_EQ(1, std::get<0>(fw.GetStats()));
     EXPECT_EQ(0, std::get<1>(fw.GetStats()));
     EXPECT_EQ(0, std::get<2>(fw.GetStats()));
@@ -54,7 +52,7 @@ TEST(FileWatcher, ShouldReturnCorrectAmountOfFilesAndLines)
     file << "FirstLine\n\nSecond";
     file.close();
 
-    FileWatcher fw(std::filesystem::temp_directory_path().append("FileWatcherTestFolder").c_str());
+    FileWatcher fw(std::filesystem::temp_directory_path().append("FileWatcherTestFolder"));
     EXPECT_EQ(2, std::get<0>(fw.GetStats())); // numOfFiles
     EXPECT_EQ(4, std::get<1>(fw.GetStats())); // numOfNonEmptyLines
     EXPECT_EQ(2, std::get<2>(fw.GetStats())); // numOfEmptyLines

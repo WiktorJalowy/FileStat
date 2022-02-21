@@ -7,11 +7,13 @@
 class FileWatcher
 {
 public:
-    FileWatcher(const std::string &path);
+    FileWatcher(std::filesystem::path path);
     std::tuple<int, int, int> GetStats();
 
 private:
     void UpdateStats();
+    void ClearStats();
+    void UpdateLineStats(const std::filesystem::directory_entry &dir_entry);
 
     int numOfFiles = 0;
     int numOfNonEmptyLines = 0;

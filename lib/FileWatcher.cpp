@@ -11,3 +11,8 @@ FileWatcher::FileWatcher(const std::string &path)
         throw;
     }
 }
+std::tuple<int, int, int> FileWatcher::GetStats()
+{
+    return std::tuple<int, int, int>{};
+}
+

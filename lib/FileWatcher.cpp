@@ -49,7 +49,12 @@ void FileWatcher::UpdateStats()
         if (dir_entry.is_regular_file())
         {
             numOfFiles++;
-            UpdateLineStats(dir_entry);
+            std::thread threadOne(
+                [&]()
+                {
+                    UpdateLineStats(dir_entry);
+            });
+            threadOne.join();
         }
     }
 }

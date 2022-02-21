@@ -17,6 +17,7 @@ class FileWatcherFixture : public ::testing::Test
 public:
     FileWatcherFixture()
     {
+        fw.SetPath(std::filesystem::temp_directory_path());
         std::filesystem::current_path(std::filesystem::temp_directory_path());
         std::filesystem::create_directory(testDirectory);
         std::filesystem::current_path(std::filesystem::temp_directory_path().append(testDirectory));
@@ -25,22 +26,16 @@ public:
     {
         std::filesystem::remove_all(std::filesystem::temp_directory_path().append(testDirectory));
     }
+    FileWatcher fw;
 };
-
-TEST_F(FileWatcherFixture, ShouldNotThrowWhenPathExists)
-{
-    ASSERT_NO_THROW(FileWatcher(std::filesystem::temp_directory_path()));
-}
 
 TEST_F(FileWatcherFixture, ShouldThrowWhenPathDoesNotExist)
 {
-
-    ASSERT_THROW(FileWatcher{nonExistingDummyPath}, std::exception);
+    ASSERT_THROW(fw.SetPath(nonExistingDummyPath), std::exception);
 }
 
 TEST_F(FileWatcherFixture, ShouldReturnZeroFilesZeroLinesZeroEmptyLinesWhenGivenFolderIsEmpty)
 {
-    FileWatcher fw(std::filesystem::current_path());
     const auto result = fw.GetStats();
     EXPECT_EQ(0, std::get<0>(result));
     EXPECT_EQ(0, std::get<1>(result));
@@ -50,7 +45,6 @@ TEST_F(FileWatcherFixture, ShouldReturnZeroFilesZeroLinesZeroEmptyLinesWhenGiven
 TEST_F(FileWatcherFixture, ShouldReturnOneFilesZeroLinesZeroEmptyLines)
 {
     std::ofstream("asdfsf");
-    FileWatcher fw(std::filesystem::current_path());
 
     const auto result = fw.GetStats();
     EXPECT_EQ(1, std::get<0>(result));
@@ -70,7 +64,6 @@ TEST_F(FileWatcherFixture, ShouldReturnCorrectAmountOfFilesAndLines)
     file << dummyFileContentWithTwoEmptyAnd3NonEmptyLines;
     file.close();
 
-    FileWatcher fw(std::filesystem::current_path());
     const auto result = fw.GetStats();
     EXPECT_EQ(2, std::get<0>(result)); // numOfFiles
     EXPECT_EQ(6, std::get<1>(result)); // numOfNonEmptyLines

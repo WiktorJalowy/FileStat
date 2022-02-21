@@ -1,6 +1,6 @@
 #include "lib/FileWatcher.hpp"
 
-FileWatcher::FileWatcher(std::filesystem::path path)
+void FileWatcher::SetPath(std::filesystem::path path)
 {
     try
     {

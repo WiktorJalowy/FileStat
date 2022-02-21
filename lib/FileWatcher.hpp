@@ -11,8 +11,8 @@
 class FileWatcher
 {
 public:
-    FileWatcher(std::filesystem::path path);
     std::tuple<int, int, int> GetStats();
+    void SetPath(std::filesystem::path path);
 
 private:
     void UpdateStats();

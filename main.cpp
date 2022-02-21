@@ -18,5 +18,13 @@ int main(int argc, char **argv)
         std::cout << e.what() << std::endl;
         return -1;
     }
+
+    for (const auto &dir_entry : std::filesystem::recursive_directory_iterator("."))
+    {
+        if(dir_entry.is_regular_file())
+        {
+            std::cout << dir_entry << '\n';
+        }
+    }
     return 0;
 }

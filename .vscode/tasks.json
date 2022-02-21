@@ -1,0 +1,18 @@
+{
+    "testExplorer.addToEditorContextMenu": true,
+    "tasks": [
+        {
+            "label": "BuildApp",
+            "type": "shell",
+            "group": "build",
+            "command": "bazel build ...",
+        },
+        {
+            "label": "TestApp",
+            "type": "shell",
+            "group": "build",
+            "command": "bazel test ...",
+        },
+    ],
+    "version": "2.0.0"
+}

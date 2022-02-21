@@ -18,13 +18,14 @@ int main(int argc, char **argv)
         std::cout << e.what() << std::endl;
         return -1;
     }
-
+    int numOfFiles = 0;
     for (const auto &dir_entry : std::filesystem::recursive_directory_iterator("."))
     {
-        if(dir_entry.is_regular_file())
+        if (dir_entry.is_regular_file())
         {
-            std::cout << dir_entry << '\n';
+            numOfFiles++;
         }
     }
+    std::cout << numOfFiles << std::endl;
     return 0;
 }

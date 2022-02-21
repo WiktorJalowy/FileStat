@@ -1,5 +1,4 @@
 #include "lib/FileWatcher.hpp"
-#include <filesystem>
 #include <gtest/gtest.h>
 
 TEST(FileWatcher, ShouldNotThrowWhenPathExists)
